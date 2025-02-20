@@ -1,0 +1,116 @@
+﻿This document describes the requirements for a WordPress plugin to be used by our customers. The plugin will implement a chatbot frontend. The frontend will communicate with an already existing backend.
+General requirements
+1. The styling of the component must be editable within the admin site of the wordpress installation.
+2. All user-facing designs must be modifiable to be aligned with the customer’s corporate identity and design. To achieve this flexibility all UI-Elements must be modifiable by editing a css file or editing the plugin-settings via the admin-panel of wordpress.
+3. All functionality must be developed according to least-priviledge and data-protection standards.
+4. Keep websecurity in mind with focus on cross-site-scripting
+5. The contracting entity will supervise and manage the development process of the plugin.
+   1. Weekly code reviews, inspections
+   2. Final review before delivery
+6. The plugin is to be implemented as a WordPress plugin utilizing best practices of development for wordpress plugins.
+7. The chatbot uses the default language that is set for the user browser (it must be able to handle at least German and English
+8. The plugin must scale with screen resolution (responsible interface) and also support smaller displays like mobile devices.
+9. Backend authentication is required. A bearer token has to be sent as a header parameter. This token must be editable within the configuration of the plugin.
+10. Development should follow WCAG principles. (see https://www.w3.org/TR/WCAG21/)
+Detailed requirements
+Configuration of the plugin parameters
+*  Editable plugin parameters:
+   * Font-family (drop down)
+   * Font-size (number input)
+   * Colorschema (Button, Primary color, secondary color, highlight color, href color) with colorpicker of rgb code. Make sure the user can see a preview of the chosen color.
+   * Alternating colorschema for chat-window (textcolor, background color for user prompt and bot answer fields (colorpicker of rgb code
+   * Avatar-Icon for bot and user fields. Should be chosen from material icons. (select box)
+   * Maximum limit for tokens in chathistory. (number input, defaults to 8500)
+   * Log-Level for component. (drop down, defaults to “DEBUG”)
+   * Welcome message (text-input)
+   * Position of the Chat-Button (drop down values: [LOWER-LEFT, UPPER-LEFT, LOWER-RIGHT, UPPER-RIGHT], defaults to: “LOWER-RIGHT”)
+General Interface
+The plugin will add a button to the website.
+The default position will be the lower, right corner of each public facing site's viewport. Upon clicking the button, a chat window will open within the existing site.
+The position of the button must be editable within the admin-panel.
+
+
+If there is a connection error or the chatbot cannot access the backend the chatbot icon should be deactivated. 
+  
+
+  
+
+Chat-Interface
+1. The chatbot starts the conversation by greeting the user. (According to the system-settings.)
+2. The user enters his question to the bot and sends his post to the bot by either hitting the enter-key or by clicking a button in the chatwindow.
+3. The bot tries to answer the question by calling the suitable backend service.
+4. This continues until the user finally gets a successful response to his initial question.
+
+
+Chat-Interface Design
+The Chat-Window should have a width of about 20% of the total width of the website by default. The width should be responsible, so that the chat can also be used on smaller devices like mobile phones.
+
+
+The user should be able to minimize the chatwindow. If there is an active chat the chat-icon should include an indication when minimized.
+
+
+At any point during the chat the user should be able to reset the chat-history and start a new chat. The chatbot should contain a small button “new chat”.
+
+
+The chathistory should have a maximum limit of tokens. Whenever a chat hits this limit the bot should display a warning message “Maximum amount of tokens reached”.
+
+
+The chat history should be saved on a user-session basis. The chathistory should be saved via cookie so that the last chat can be reloaded whenever the user revisits the website.
+
+
+The background-color and the text-color of user-messages and bot-messages should be editable in the admin-panel of wordpress.
+
+
+The text of user prompts should be aligned to the right.
+
+
+The text of chatbot-answers should be aligned to the left.
+
+
+Right of the user-text there is the “user-avatar” icon which can be customized in the admin-panel.
+
+
+Left of the chatbot answers there is the “bot-avatar” icon which can be customized in the admin-panel.
+
+
+
+
+The Chat-Window should follow this process:
+* At the bottom there is a cell for the input of the user prompt
+* Above this prompt-input there is the chat history in chronological order. The oldest message is on top, the newest at the bottom.
+* Whenever the client sends the user prompt to the backend there should be an animation displayed, showing the user that the bot is now “thinking”. This animation should be cleared after the chatbot received the answer from the backend. The animation should contain “hopping dots” that indicate that the bot will start typing.
+* Then the answer will be printed in a new chat-message-cell
+
+
+Errors / Monitoring
+If there is a connection error or the chatbot cannot access the backend during website loading the chatbot icon should be deactivated. The plugin should try to reconnect. After successful reconnection the chat-button should be activated.
+
+
+If the chatbot frontend will suffer a connection error to the backend while a user chat is active. The window should be greyed and an error message “connection error - trying to reconnect” should be displayed. The chatbot should then try to reach the backend. 
+
+
+If an error occurs the error should be logged via PHP logging system.
+AI disclaimer and source information
+Every AI-generated message will have a note that AI information can be incorrect. In addition, every AI generated message will be clickable. Upon clicking, all documents used to generate the AI generated message will be displayed. The pop-up shows the snippets that were used to generate the message.
+Backend API
+The backend for this plugin already exists. For the details of the interface, see the enclosed openAPI API definition YAML file. (chatbot_backend_openapi.json)
+Testing
+Make sure to create unit-tests for each parts of the implementation.
+Create integration tests with the backend api. Make sure to mock api calls for testing!
+Compatibility
+Make sure that the plugin is compatible with wordpress versions 6.4 up to the latest version.
+PHP Version 8.3 and 8.4
+These browsers have to be support: chrome, firefox, safari (latest versions)
+Development Process
+All issues will be tracked within an instance of jetbrains youtrack.
+During code reviews we will decide if an issue can be moved to done
+Code will be pushed to a github repository
+CI/CD Pipeline
+Make sure to create a github action that creates a deliverable package on merge / push to main branch
+Documentation
+Make sure to create documentation that covers these parts:
+* Installation of the plugin
+* Configuration and styling
+
+
+The documentation should be written in German or English and formatted as markdown files. The documentation should be part of the repository and hosted via github pages.
