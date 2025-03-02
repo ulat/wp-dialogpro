@@ -1,4 +1,4 @@
-name: Build WordPress Plugin Package
+name: WordPress Plugin CI/CD
 
 on:
   push:
@@ -9,8 +9,58 @@ on:
       - main
 
 jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    strategy:
+      matrix:
+        php-version: ['8.3', '8.4']
+        wordpress-version: ['6.4', 'latest']
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, mysqli
+          tools: composer:v2
+          coverage: xdebug
+
+      - name: Install WordPress Test Suite
+        run: |
+          bash bin/install-wp-tests.sh wordpress_test root root localhost ${{ matrix.wordpress-version }}
+
+      - name: Install Dependencies
+        run: composer install
+
+      - name: Run PHPUnit Tests
+        run: |
+          mkdir -p build/logs
+          vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-coverage-${{ matrix.php-version }}
+          path: build/logs/clover.xml
+
   build:
     name: Build Plugin Package
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -23,23 +73,41 @@ jobs:
           VERSION=$(grep -m 1 "Version:" wp-dialogpro.php | awk '{print $3}')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Create Plugin Package
+      - name: Create Distribution Directory
         run: |
-          # Create build directory
-          mkdir -p build/wp-dialogpro
+          # Create dist directory
+          mkdir -p dist/wp-dialogpro
 
           # Copy required files and directories
-          cp -r includes assets languages templates wp-dialogpro.php uninstall.php readme.txt build/wp-dialogpro/
+          cp -r includes assets languages templates wp-dialogpro.php uninstall.php readme.txt dist/wp-dialogpro/
+
+          # Remove development files
+          cd dist/wp-dialogpro
+          rm -rf **/*.map
+          rm -rf **/.git*
+          rm -rf **/node_modules
+          rm -rf **/tests
+          rm -rf **/.editorconfig
+          rm -rf **/.eslintrc
+          rm -rf **/.stylelintrc
+          rm -rf **/phpunit.xml
+          rm -rf **/phpcs.xml
+          rm -rf **/composer.json
+          rm -rf **/composer.lock
+          rm -rf **/package.json
+          rm -rf **/package-lock.json
+          rm -rf **/webpack.config.js
+          rm -rf **/.DS_Store
 
           # Create ZIP archive
-          cd build
+          cd ..
           zip -r wp-dialogpro-${{ steps.get_version.outputs.version }}.zip wp-dialogpro/
 
       - name: Create Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
-          files: build/wp-dialogpro-${{ steps.get_version.outputs.version }}.zip
+          files: dist/wp-dialogpro-${{ steps.get_version.outputs.version }}.zip
           tag_name: v${{ steps.get_version.outputs.version }}
           name: Release v${{ steps.get_version.outputs.version }}
           body: |
@@ -53,5 +121,72 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: wp-dialogpro-${{ steps.get_version.outputs.version }}
-          path: build/wp-dialogpro-${{ steps.get_version.outputs.version }}.zip
+          path: dist/wp-dialogpro-${{ steps.get_version.outputs.version }}.zip
           retention-days: 5
+
+  cleanup:
+    name: Cleanup Artifacts
+    needs: build
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Delete Old Artifacts
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          age: 1 week
+          skip-recent: 5
+
+
+# Key changes made:
+
+# 1. Added Test Job:
+# ```yaml
+# test:
+#   name: Run Tests
+#   # Includes MySQL service for WordPress tests
+#   # Runs tests on multiple PHP and WordPress versions
+#   # Generates and uploads test coverage
+# ```
+
+# 2. Build Job Dependencies:
+# ```yaml
+# build:
+#   needs: test  # Build only runs after successful tests
+# ```
+
+# 3. Distribution Directory:
+# ```yaml
+# - name: Create Distribution Directory
+#   run: |
+#     mkdir -p dist/wp-dialogpro  # Changed from build to dist
+#     # Cleanup development files
+#     # Create production-ready package
+# ```
+
+# 4. Test Coverage:
+# ```yaml
+# - name: Run PHPUnit Tests
+#   run: |
+#     mkdir -p build/logs
+#     vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+# ```
+
+# 5. Artifact Management:
+# - Test coverage artifacts
+# - Distribution package
+# - Automatic cleanup of old artifacts
+
+# This workflow ensures:
+# 1. Tests run before any merge/push to main
+# 2. Multiple PHP and WordPress versions are tested
+# 3. Test coverage is generated and stored
+# 4. Clean distribution package is created
+# 5. Artifacts are properly managed
+# 6. Release is created only on successful tests
+
+# You'll need to:
+# 1. Have PHPUnit configuration file
+# 2. Have Composer configuration
+# 3. Have the WordPress test installation script
+# 4. Configure test environment properly
