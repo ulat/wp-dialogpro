@@ -1,0 +1,184 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DialogPro 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-dialogpro\n"
+"POT-Creation-Date: 2024-01-20 12:00+0100\n"
+"PO-Revision-Date: 2024-01-20 12:00+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4\n"
+"X-Domain: wp-dialogpro\n"
+
+# General
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Send Message"
+msgstr "Send Message"
+
+msgid "Type your message..."
+msgstr "Type your message..."
+
+msgid "Open chat"
+msgstr "Open chat"
+
+msgid "Close chat"
+msgstr "Close chat"
+
+msgid "Minimize chat"
+msgstr "Minimize chat"
+
+msgid "Chat Window"
+msgstr "Chat Window"
+
+msgid "Chat messages"
+msgstr "Chat messages"
+
+msgid "Message input"
+msgstr "Message input"
+
+# Status Messages
+msgid "Connecting..."
+msgstr "Connecting..."
+
+msgid "Connected"
+msgstr "Connected"
+
+msgid "Disconnected"
+msgstr "Disconnected"
+
+msgid "Processing..."
+msgstr "Processing..."
+
+msgid "Sending..."
+msgstr "Sending..."
+
+# Error Messages
+msgid "Error sending message"
+msgstr "Error sending message"
+
+msgid "Connection lost"
+msgstr "Connection lost"
+
+msgid "Token limit reached"
+msgstr "Token limit reached"
+
+msgid "Invalid response from server"
+msgstr "Invalid response from server"
+
+msgid "Session expired"
+msgstr "Session expired"
+
+msgid "Message cannot be empty"
+msgstr "Message cannot be empty"
+
+msgid "Invalid message format"
+msgstr "Invalid message format"
+
+msgid "Failed to process message: "
+msgstr "Failed to process message: "
+
+# Settings
+msgid "DialogPro Settings"
+msgstr "DialogPro Settings"
+
+msgid "General Settings"
+msgstr "General Settings"
+
+msgid "API Settings"
+msgstr "API Settings"
+
+msgid "Appearance Settings"
+msgstr "Appearance Settings"
+
+msgid "Advanced Settings"
+msgstr "Advanced Settings"
+
+msgid "API Endpoint"
+msgstr "API Endpoint"
+
+msgid "API Token"
+msgstr "API Token"
+
+msgid "Chat Position"
+msgstr "Chat Position"
+
+msgid "Bottom Right"
+msgstr "Bottom Right"
+
+msgid "Bottom Left"
+msgstr "Bottom Left"
+
+msgid "Top Right"
+msgstr "Top Right"
+
+msgid "Top Left"
+msgstr "Top Left"
+
+msgid "Chat Width"
+msgstr "Chat Width"
+
+msgid "Primary Color"
+msgstr "Primary Color"
+
+msgid "Font Family"
+msgstr "Font Family"
+
+msgid "Font Size"
+msgstr "Font Size"
+
+msgid "Token Limit"
+msgstr "Token Limit"
+
+msgid "Welcome Message"
+msgstr "Welcome Message"
+
+msgid "Hello! How can I help you today?"
+msgstr "Hello! How can I help you today?"
+
+# Admin Messages
+msgid "Settings saved successfully."
+msgstr "Settings saved successfully."
+
+msgid "Error saving settings."
+msgstr "Error saving settings."
+
+msgid "Invalid API configuration"
+msgstr "Invalid API configuration"
+
+msgid "API connection successful"
+msgstr "API connection successful"
+
+msgid "API connection failed"
+msgstr "API connection failed"
+
+# System Messages
+msgid "WordPress %s or higher is required"
+msgstr "WordPress %s or higher is required"
+
+msgid "PHP %s or higher is required"
+msgstr "PHP %s or higher is required"
+
+msgid "Invalid session"
+msgstr "Invalid session"
+
+msgid "Message exceeds maximum length of %d characters"
+msgstr "Message exceeds maximum length of %d characters"
+
+# Accessibility
+msgid "Loading chat messages"
+msgstr "Loading chat messages"
+
+msgid "Message sent"
+msgstr "Message sent"
+
+msgid "Message received"
+msgstr "Message received"
+
+msgid "Error occurred"
+msgstr "Error occurred"

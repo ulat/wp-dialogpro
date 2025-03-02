@@ -1,0 +1,350 @@
+/**
+ * DialogPro Main Stylesheet
+ * @package DialogPro
+ * @version 1.0.0
+ */
+
+/* Base Container */
+.dialogpro-chat-container {
+    position: fixed;
+    z-index: 999999;
+    transition: all 0.3s ease;
+}
+
+/* Position Classes */
+.dialogpro-position-bottom-right {
+    right: 20px;
+    bottom: 20px;
+}
+
+.dialogpro-position-bottom-left {
+    left: 20px;
+    bottom: 20px;
+}
+
+.dialogpro-position-top-right {
+    right: 20px;
+    top: 20px;
+}
+
+.dialogpro-position-top-left {
+    left: 20px;
+    top: 20px;
+}
+
+/* Chat Button */
+.dialogpro-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--dialogpro-primary-color, #007bff);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.dialogpro-button:hover {
+    transform: scale(1.1);
+}
+
+.dialogpro-button:focus {
+    outline: 2px solid var(--dialogpro-primary-color, #007bff);
+    outline-offset: 2px;
+}
+
+/* Chat Window */
+.dialogpro-chat-window {
+    display: none;
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 350px;
+    max-width: 90vw;
+    height: 500px;
+    max-height: 80vh;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dialogpro-chat-window.active {
+    display: flex;
+}
+
+/* Chat Header */
+.dialogpro-chat-header {
+    padding: 15px;
+    background-color: var(--dialogpro-primary-color, #007bff);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 60px;
+}
+
+.dialogpro-chat-title {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.dialogpro-chat-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.dialogpro-control-button {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.dialogpro-control-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Messages Container */
+.dialogpro-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    scroll-behavior: smooth;
+}
+
+/* Message Styles */
+.dialogpro-message {
+    max-width: 85%;
+    margin: 10px 0;
+    clear: both;
+    animation: messageSlideIn 0.3s ease;
+}
+
+.dialogpro-message-bot {
+    float: left;
+    background-color: #f1f1f1;
+    border-radius: 15px 15px 15px 0;
+}
+
+.dialogpro-message-user {
+    float: right;
+    background-color: var(--dialogpro-primary-color, #007bff);
+    color: white;
+    border-radius: 15px 15px 0 15px;
+}
+
+.dialogpro-message-content {
+    padding: 10px 15px;
+    word-wrap: break-word;
+}
+
+.dialogpro-message-time {
+    font-size: 0.8em;
+    opacity: 0.7;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Input Area */
+.dialogpro-input-container {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: white;
+}
+
+.dialogpro-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+}
+
+.dialogpro-message-input {
+    flex: 1;
+    padding: 12px;
+    padding-right: 50px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    resize: none;
+    max-height: 100px;
+    min-height: 44px;
+    line-height: 1.4;
+}
+
+.dialogpro-message-input:focus {
+    outline: none;
+    border-color: var(--dialogpro-primary-color, #007bff);
+}
+
+.dialogpro-input-controls {
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dialogpro-send-button {
+    background: transparent;
+    border: none;
+    color: var(--dialogpro-primary-color, #007bff);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.dialogpro-send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.dialogpro-send-button:hover:not(:disabled) {
+    transform: scale(1.1);
+}
+
+/* Loading Indicator */
+.dialogpro-loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.dialogpro-loading.active {
+    display: flex;
+}
+
+.dialogpro-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--dialogpro-primary-color, #007bff);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Token Counter */
+.dialogpro-token-counter {
+    padding: 5px 15px;
+    font-size: 0.9em;
+    color: #666;
+    background-color: #f8f8f8;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Error Container */
+.dialogpro-error-container {
+    display: none;
+    padding: 10px 15px;
+    background-color: #ff5252;
+    color: white;
+    text-align: center;
+}
+
+/* Typing Indicator */
+.dialogpro-typing-indicator {
+    padding: 15px;
+    display: flex;
+    gap: 5px;
+}
+
+.dialogpro-typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background-color: #90909090;
+    border-radius: 50%;
+    animation: typing 1s infinite;
+}
+
+.dialogpro-typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dialogpro-typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Animations */
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes typing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 480px) {
+    .dialogpro-chat-window {
+        width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+    }
+
+    .dialogpro-button {
+        width: 50px;
+        height: 50px;
+    }
+
+    .dialogpro-message {
+        max-width: 90%;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .dialogpro-chat-container,
+    .dialogpro-button,
+    .dialogpro-message,
+    .dialogpro-loading-spinner {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+    .dialogpro-button,
+    .dialogpro-message-user,
+    .dialogpro-chat-header {
+        background-color: ButtonFace;
+        color: ButtonText;
+    }
+}

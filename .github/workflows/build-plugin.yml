@@ -1,0 +1,57 @@
+name: Build WordPress Plugin Package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Plugin Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Get Plugin Version
+        id: get_version
+        run: |
+          VERSION=$(grep -m 1 "Version:" wp-dialogpro.php | awk '{print $3}')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Plugin Package
+        run: |
+          # Create build directory
+          mkdir -p build/wp-dialogpro
+
+          # Copy required files and directories
+          cp -r includes assets languages templates wp-dialogpro.php uninstall.php readme.txt build/wp-dialogpro/
+
+          # Create ZIP archive
+          cd build
+          zip -r wp-dialogpro-${{ steps.get_version.outputs.version }}.zip wp-dialogpro/
+
+      - name: Create Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/wp-dialogpro-${{ steps.get_version.outputs.version }}.zip
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Release v${{ steps.get_version.outputs.version }}
+          body: |
+            Release of DialogPro v${{ steps.get_version.outputs.version }}
+            
+            Please refer to the changelog in readme.txt for details about this release.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: wp-dialogpro-${{ steps.get_version.outputs.version }}
+          path: build/wp-dialogpro-${{ steps.get_version.outputs.version }}.zip
+          retention-days: 5

@@ -1,0 +1,15 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DialogPro 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-dialogpro\n"
+"POT-Creation-Date: 2024-01-20 12:00+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: Poedit 3.4\n"
+"X-Domain: wp-dialogpro\n"
+
+# Include all message strings from above...

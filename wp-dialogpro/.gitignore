@@ -1,0 +1,29 @@
+# Build
+/build
+/dist
+
+# Dependencies
+/node_modules
+/vendor
+/composer.lock
+/package-lock.json
+
+# Development
+.DS_Store
+.idea
+.vscode
+*.log
+*.map
+
+# Testing
+/tmp
+/tests/coverage
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# WordPress
+wp-config.php
+wp-content/
