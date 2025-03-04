@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -53,10 +53,11 @@ jobs:
           vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
       - name: Upload Test Coverage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-coverage-${{ matrix.php-version }}
           path: build/logs/clover.xml
+          retention-days: 5
 
   build:
     name: Build Plugin Package
@@ -65,7 +66,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get Plugin Version
         id: get_version
@@ -118,7 +119,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wp-dialogpro-${{ steps.get_version.outputs.version }}
           path: dist/wp-dialogpro-${{ steps.get_version.outputs.version }}.zip
@@ -132,61 +133,10 @@ jobs:
 
     steps:
       - name: Delete Old Artifacts
-        uses: geekyeggo/delete-artifact@v2
+        uses: actions/delete-artifact@v2
         with:
-          age: 1 week
-          skip-recent: 5
-
-
-# Key changes made:
-
-# 1. Added Test Job:
-# ```yaml
-# test:
-#   name: Run Tests
-#   # Includes MySQL service for WordPress tests
-#   # Runs tests on multiple PHP and WordPress versions
-#   # Generates and uploads test coverage
-# ```
-
-# 2. Build Job Dependencies:
-# ```yaml
-# build:
-#   needs: test  # Build only runs after successful tests
-# ```
-
-# 3. Distribution Directory:
-# ```yaml
-# - name: Create Distribution Directory
-#   run: |
-#     mkdir -p dist/wp-dialogpro  # Changed from build to dist
-#     # Cleanup development files
-#     # Create production-ready package
-# ```
-
-# 4. Test Coverage:
-# ```yaml
-# - name: Run PHPUnit Tests
-#   run: |
-#     mkdir -p build/logs
-#     vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-# ```
-
-# 5. Artifact Management:
-# - Test coverage artifacts
-# - Distribution package
-# - Automatic cleanup of old artifacts
-
-# This workflow ensures:
-# 1. Tests run before any merge/push to main
-# 2. Multiple PHP and WordPress versions are tested
-# 3. Test coverage is generated and stored
-# 4. Clean distribution package is created
-# 5. Artifacts are properly managed
-# 6. Release is created only on successful tests
-
-# You'll need to:
-# 1. Have PHPUnit configuration file
-# 2. Have Composer configuration
-# 3. Have the WordPress test installation script
-# 4. Configure test environment properly
+          name: |
+            test-coverage-*
+            wp-dialogpro-*
+          useGlob: true
+          failOnError: false
