@@ -55,11 +55,19 @@ jobs:
         working-directory: wp-dialogpro
         run: composer install
 
+      - name: List Installed Packages
+        working-directory: wp-dialogpro
+        run: composer show
+
+      - name: List Test Files
+        working-directory: wp-dialogpro
+        run: find tests -type f -name '*.php'
+
       - name: Run PHPUnit Tests
         working-directory: wp-dialogpro
         run: |
           mkdir -p build/logs
-          vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+          vendor/bin/phpunit --coverage-clover build/logs/clover.xml tests
 
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v4
