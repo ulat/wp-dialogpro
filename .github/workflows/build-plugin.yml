@@ -25,10 +25,8 @@ jobs:
 
     strategy:
       matrix:
-        # php-version: ['8.3', '8.4']
-        # wordpress-version: ['6.6.2', '6.7.2']
-        php-version: ['8.4']
-        wordpress-version: ['6.7.2']
+        php-version: ['8.3', '8.4']
+        wordpress-version: ['6.4', 'latest']
 
     steps:
       - name: Checkout Repository
@@ -41,23 +39,21 @@ jobs:
           extensions: mbstring, mysqli
           tools: composer:v2
           coverage: xdebug
-          
-      - name: Install WordPress Test Suite      
-        run: |
-          if [ ! -f "bin/install-wp-tests.sh" ]; then
-            echo "WordPress test installation script not found!"
-            exit 1
-          fi
-          bash bin/install-wp-tests.sh wordpress_test root root localhost ${{ matrix.wordpress-version }}
 
       - name: Install WordPress Test Suite
         run: |
-          bash bin/install-wp-tests.sh wordpress_test root root localhost ${{ matrix.wordpress-version }}
+          if [ ! -f "wp-dialogpro/bin/install-wp-tests.sh" ]; then
+            echo "WordPress test installation script not found!"
+            exit 1
+          fi
+          bash wp-dialogpro/bin/install-wp-tests.sh wordpress_test root root localhost ${{ matrix.wordpress-version }}
 
       - name: Install Dependencies
+        working-directory: wp-dialogpro
         run: composer install
 
       - name: Run PHPUnit Tests
+        working-directory: wp-dialogpro
         run: |
           mkdir -p build/logs
           vendor/bin/phpunit --coverage-clover build/logs/clover.xml
@@ -66,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-coverage-${{ matrix.php-version }}
-          path: build/logs/clover.xml
+          path: wp-dialogpro/build/logs/clover.xml
           retention-days: 5
 
   build:
@@ -81,7 +77,7 @@ jobs:
       - name: Get Plugin Version
         id: get_version
         run: |
-          VERSION=$(grep -m 1 "Version:" wp-dialogpro.php | awk '{print $3}')
+          VERSION=$(grep -m 1 "Version:" wp-dialogpro/wp-dialogpro.php | awk '{print $3}')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Create Distribution Directory
@@ -90,7 +86,7 @@ jobs:
           mkdir -p dist/wp-dialogpro
 
           # Copy required files and directories
-          cp -r includes assets languages templates wp-dialogpro.php uninstall.php readme.txt dist/wp-dialogpro/
+          cp -r wp-dialogpro/includes wp-dialogpro/assets wp-dialogpro/languages wp-dialogpro/templates wp-dialogpro/wp-dialogpro.php wp-dialogpro/uninstall.php wp-dialogpro/readme.txt dist/wp-dialogpro/
 
           # Remove development files
           cd dist/wp-dialogpro
@@ -150,3 +146,29 @@ jobs:
             wp-dialogpro-*
           useGlob: true
           failOnError: false
+
+
+# Key changes made:
+# 1. Added `wp-dialogpro/` prefix to script path:
+# ```yaml
+# if [ ! -f "wp-dialogpro/bin/install-wp-tests.sh" ]
+# ```
+
+# 2. Added working directory for composer and PHPUnit:
+# ```yaml
+# working-directory: wp-dialogpro
+# ```
+
+# 3. Updated file paths in test coverage upload:
+# ```yaml
+# path: wp-dialogpro/build/logs/clover.xml
+# ```
+
+# 4. Updated version extraction path:
+# ```yaml
+# VERSION=$(grep -m 1 "Version:" wp-dialogpro/wp-dialogpro.php | awk '{print $3}')
+# ```
+
+# 5. Updated file copying paths:
+# ```yaml
+# cp -r wp-dialogpro/includes wp-dialogpro/assets ...
