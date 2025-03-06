@@ -122,7 +122,7 @@ jobs:
           name: Release v${{ steps.get_version.outputs.version }}
           body: |
             Release of DialogPro v${{ steps.get_version.outputs.version }}
-            
+
             Please refer to the changelog in readme.txt for details about this release.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -149,29 +149,3 @@ jobs:
             wp-dialogpro-*
           useGlob: true
           failOnError: false
-
-
-# Key changes made:
-# 1. Added `wp-dialogpro/` prefix to script path:
-# ```yaml
-# if [ ! -f "wp-dialogpro/bin/install-wp-tests.sh" ]
-# ```
-
-# 2. Added working directory for composer and PHPUnit:
-# ```yaml
-# working-directory: wp-dialogpro
-# ```
-
-# 3. Updated file paths in test coverage upload:
-# ```yaml
-# path: wp-dialogpro/build/logs/clover.xml
-# ```
-
-# 4. Updated version extraction path:
-# ```yaml
-# VERSION=$(grep -m 1 "Version:" wp-dialogpro/wp-dialogpro.php | awk '{print $3}')
-# ```
-
-# 5. Updated file copying paths:
-# ```yaml
-# cp -r wp-dialogpro/includes wp-dialogpro/assets ...
