@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         php-version: ['8.4']
-        wordpress-version: ['6.7.2']
+        wordpress-version: ['6.7', 'latest']
 
     steps:
       - name: Checkout Repository
