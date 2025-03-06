@@ -40,6 +40,9 @@ jobs:
           tools: composer:v2
           coverage: xdebug
 
+      - name: Install Git
+        run: sudo apt-get install -y git
+
       - name: Install WordPress Test Suite
         run: |
           if [ ! -f "wp-dialogpro/bin/install-wp-tests.sh" ]; then
