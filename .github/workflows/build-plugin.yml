@@ -37,7 +37,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring, mysqli
-          tools: composer:v2
+          tools: phpunit, composer:v2
           coverage: xdebug
 
       - name: Install Git
