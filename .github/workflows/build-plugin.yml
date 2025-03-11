@@ -80,6 +80,8 @@ jobs:
     name: Build Plugin Package
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout Repository
@@ -140,6 +142,7 @@ jobs:
         env:
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
