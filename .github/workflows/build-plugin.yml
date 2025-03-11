@@ -157,6 +157,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      actions: write
 
     steps:
       - name: Delete Old Artifacts
