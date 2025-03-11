@@ -1,5 +1,23 @@
 {
+    "name": "pgd/wp-dialogpro",
+    "version": "1.0.0",
+    "author": "Bernhard Mayr",
+    "description": "Your WordPress Plugin Description",
+    "type": "wordpress-plugin",
+    "require": {
+        "php": "^8.0"
+    },
     "require-dev": {
         "phpunit/phpunit": "^9"
+    },
+    "autoload": {
+        "psr-4": {
+            "pgd\\": "wp-dialogpro/"
+        }
+    },
+    "extra": {
+        "wordpress-plugin": {
+            "plugin_file": "wp-dialogpro/wp-dialogpro.php"
+        }
     }
 }
