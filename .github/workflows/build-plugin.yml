@@ -82,6 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
 
     steps:
       - name: Checkout Repository
@@ -140,8 +141,8 @@ jobs:
 
             Please refer to the changelog in readme.txt for details about this release.
         env:
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          #GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         
 
       - name: Upload Build Artifact
