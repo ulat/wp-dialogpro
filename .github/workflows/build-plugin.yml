@@ -152,30 +152,30 @@ jobs:
           path: dist/wp-dialogpro-${{ steps.get_version.outputs.version }}.zip
           retention-days: 5
 
-  cleanup:
-    name: Cleanup Artifacts
-    needs: build
-    runs-on: ubuntu-latest
-    if: always()
-    permissions:
-      actions: write
+  # cleanup:
+  #   name: Cleanup Artifacts
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: always()
+  #   permissions:
+  #     actions: write
 
-    steps:
-      - name: Delete Old Artifacts
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const artifacts = await github.rest.actions.listArtifactsForRepo({
-              owner,
-              repo,
-            });
-            for (const artifact of artifacts.data.artifacts) {
-              if (artifact.name.startsWith('test-coverage-') || artifact.name.startsWith('wp-dialogpro-')) {
-                await github.rest.actions.deleteArtifact({
-                  owner,
-                  repo,
-                  artifact_id: artifact.id,
-                });
-              }
-            }
+  #   steps:
+  #     - name: Delete Old Artifacts
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           const { owner, repo } = context.repo;
+  #           const artifacts = await github.rest.actions.listArtifactsForRepo({
+  #             owner,
+  #             repo,
+  #           });
+  #           for (const artifact of artifacts.data.artifacts) {
+  #             if (artifact.name.startsWith('test-coverage-') || artifact.name.startsWith('wp-dialogpro-')) {
+  #               await github.rest.actions.deleteArtifact({
+  #                 owner,
+  #                 repo,
+  #                 artifact_id: artifact.id,
+  #               });
+  #             }
+  #           }
