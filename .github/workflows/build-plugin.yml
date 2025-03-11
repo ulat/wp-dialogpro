@@ -134,7 +134,7 @@ jobs:
             Please refer to the changelog in readme.txt for details about this release.
         env:
           # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
