@@ -121,6 +121,11 @@ jobs:
           cd ..
           zip -r wp-dialogpro-${{ steps.get_version.outputs.version }}.zip wp-dialogpro/
 
+      - name: List files
+        run: |
+          pwd
+          ls -R
+          
       - name: Create Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
