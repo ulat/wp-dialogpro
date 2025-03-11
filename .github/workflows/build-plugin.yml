@@ -160,10 +160,20 @@ jobs:
 
     steps:
       - name: Delete Old Artifacts
-        uses: actions/delete-artifact@v2
+        uses: actions/github-script@v6
         with:
-          name: |
-            test-coverage-*
-            wp-dialogpro-*
-          useGlob: true
-          failOnError: false
+          script: |
+            const { owner, repo } = context.repo;
+            const artifacts = await github.rest.actions.listArtifactsForRepo({
+              owner,
+              repo,
+            });
+            for (const artifact of artifacts.data.artifacts) {
+              if (artifact.name.startsWith('test-coverage-') || artifact.name.startsWith('wp-dialogpro-')) {
+                await github.rest.actions.deleteArtifact({
+                  owner,
+                  repo,
+                  artifact_id: artifact.id,
+                });
+              }
+            }
